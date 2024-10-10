@@ -9,7 +9,7 @@ console.log("Base URL for embeds that require hosted renders:", CONFIG.baseAppUr
 if (!CONFIG.baseAppUrl) {
   console.warn('Warning: CONFIG.baseAppUrl not set, default value used');
 }
-
+const path = require('path');
 import express from 'express';
 import * as jsonxml from 'jsontoxml';
 
@@ -170,8 +170,12 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 app.get('/', function(req, res) {
-  res.writeHead(302, { Location: 'http://iframely.com'});
+  res.writeHead(302, { Location: 'http://eligapris.com'});
   res.end();
 });
 
-process.title = "iframely";
+app.get('/embed.js', function(req, res) {
+  const filePath = path.join(__dirname, 'embed.js');
+  res.sendFile(filePath);
+});
+process.title = "eligapris";
