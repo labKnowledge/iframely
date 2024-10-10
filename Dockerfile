@@ -15,7 +15,6 @@ ENV NODE_ENV=local
 ## Utilize docker layer cache
 COPY package.json yarn.lock /iframely/
 RUN yarn install --pure-lockfile --production
-RUN yarn add path
 
 COPY . /iframely
 
