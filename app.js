@@ -1,5 +1,6 @@
 import { fileURLToPath } from "url";
 import path, { dirname } from "path";
+import fs from "fs/promises";
 import express from "express";
 import * as jsonxml from "jsontoxml";
 
@@ -172,9 +173,38 @@ app.get("/", function (req, res) {
   res.end();
 });
 
-app.get("/files", function (req, res) {
-  const filePath = path.join(__dirname, "embed.js");
-  res.sendFile(filePath);
+const FILES_DIRECTORY = path.join(__dirname, "public");
+
+app.get("/files/:filename", async (req, res) => {
+  const { filename } = req.params;
+  const filePath = path.join(FILES_DIRECTORY, filename);
+
+  try {
+    // Check if file exists
+    await fs.access(filePath);
+
+    // Determine MIME type (you might want to expand this list)
+    const ext = filename.split(".").pop().toLowerCase();
+    const mimeTypes = {
+      js: "application/javascript",
+      css: "text/css",
+      html: "text/html",
+      json: "application/json",
+      txt: "text/plain"
+    };
+    const contentType = mimeTypes[ext] || "application/octet-stream";
+
+    // Set the content type and send the file
+    res.contentType(contentType);
+    res.sendFile(filePath);
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      res.status(404).send("File not found");
+    } else {
+      console.error("Error serving file:", error);
+      res.status(500).send("Internal server error");
+    }
+  }
 });
 
 process.title = "eligapris";
