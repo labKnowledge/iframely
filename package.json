@@ -40,6 +40,7 @@
         "node-cache": "^1.1.0",
         "node-yaml-config": "^1.0.0",
         "parse-iso-duration": "^1.1.0",
+        "path": "^0.12.7",
         "probe-image-size": "^7.2.3",
         "readabilitySAX": "1.6.1",
         "redis": "^4.6.14",
